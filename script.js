@@ -19,6 +19,9 @@ async function fetchJsonData() {
       quote: q.quote.replace(/["“”]/g, "").trim()
     }));
 
+    // Filter out quotes with <= 1 character
+    quotes = quotes.filter(q => q.quote.length > 1);
+
     console.log("Quotes loaded:", quotes);
 
     // Shuffle quotes
@@ -100,7 +103,6 @@ function copyInputValue(id) {
   }
 }
 
-
 function copyAllQuotesValue(id) {
   const copyText = $(`#${id}`).val();
   if (copyText) {
@@ -108,7 +110,6 @@ function copyAllQuotesValue(id) {
     alert("Copied the text: " + copyText);
   }
 }
-
 
 function startCarousel() {
   const $carousel = $("#carousel img");
@@ -205,7 +206,6 @@ $(document).ready(function() {
   setupPageFadeIn();
   setupSnapScroll();
 });
-
 
 function updateQuoteColumns() {
   var $container = $("#quote-preview-container-all");
