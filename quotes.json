@@ -1,371 +1,2732 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-    <meta http-equiv="Content-Security-Policy" content="default-src * filesystem: data: gap: http://www.google-analytics.com http://www.googletagmanager.com http://ssl.gstatic.com http://csvjson.s3.amazonaws.com http://csvjson.s3.us-east-2.amazonaws.com 'unsafe-eval' 'unsafe-inline'; media-src *; img-src * data:">
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<link href="/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
-
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-		<title>CSV to JSON - CSVJSON</title>
-		<meta name="description" content="Online tool for converting CSV to JSON. Convert Excel to JSON. Transpose data. Output array or hash.">
-
-		<script type="text/javascript">
-			window.APP = {
-				page: "csv2json",
-				run: true,
-				version: 0.316,
-				id: null,
-				data: null,
-				data_url: null			};
-		</script>
-
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
-		<link rel="stylesheet"
-      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/default.min.css">
-			<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
-
-		<link href="/js/3rd/jQuery-File-Upload/css/jquery.fileupload.css" rel="stylesheet" type="text/css" charset="utf-8" />
-		<link rel="stylesheet" href="https://use.typekit.net/dkv2ioo.css">
-
-		
-								<link href="/css/csvjson.css?v=0.316" rel="stylesheet" type="text/css" charset="utf-8" />
-									<script src="/js/3rd.min.js?v=0.316" type="text/javascript"></script>
-									<script src="/js/csvjson.min.js?v=0.316" type="text/javascript"></script>
-									<script src="/js/app.min.js?v=0.316" type="text/javascript"></script>
-			
-		
-		
-		<script>
-			!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t,e){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=e};analytics.SNIPPET_VERSION="4.1.0";
-				analytics.load("mVmXAtABgYVqPdbXw1a4Y19vcesa1cec");
-				analytics.page();
-			}}();
-
-			analytics.ready(function(){
-				var flatfileLinks = $('a[href*="flatfile.com"]');
-
-				flatfileLinks.each(function(){
-					var bareURL = $(this).attr('href')
-					$(this).attr('href', bareURL + '&ajs_event=came_from_csvjson&ajs_prop_ccf_id=' + window.analytics.user().anonymousId())
-				})
-
-				analytics.trackLink(flatfileLinks, 'Clicked Flatfile Link');
-			})
-	</script>
-	<!-- Global site tag (gtag.js) - Google Ads: 831825021 -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=AW-831825021"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	  gtag('config', 'AW-831825021');
-	</script>
-</head>
-<body>
-		<header class="px-4 py-4 border-bottom bg-light">
-	    <div class="container d-flex flex-wrap justify-content-left pt-2 pb-2">
-					<div class="d-flex align-items-center me-lg-auto text-decoration-none">
-								<a href="/" class="d-flex align-items-center me-lg-auto text-decoration-none">
-									<img src="img/logo_bg-light.svg" width="140">
-								</a>
-							</div>
-
-							<a class="btn d-none d-sm-block" href="https://flatfile.com/get-started?utm_source=csvjson&utm_medium=owned_site&utm_campaign=q1-2022-csvjson-redesign">
-								<img src="img/flatfile-jewel.svg" width="20" style="margin:-2px 5px 0 0px"/>
-								<b>Turnkey CSV Importer</b> &bull; <small>Installs in minutes</small>
-							</a>
-			</div>
-  	</header>
-					<header class="px-4 border-bottom">
-				<div class="container d-flex flex-wrap justify-content-left pt-3 pb-1">
-					<div class="row">
-						<div class="col-md-12">
-							<nav aria-label="breadcrumb">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="/">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">
-
-										<div class="dropdown d-flex align-items-center me-lg-auto text-decoration-none">
-													<a href="#" class="d-flex align-items-center me-lg-auto text-decoration-none dropdown-toggle" id="dropdownNavLink" data-bs-toggle="dropdown" aria-expanded="false">
-														csv2json													</a>
-													<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownNavLink" style="">
-														<li><a class="dropdown-item active" href="/csv2json">CSV to JSON</a></li>
-														<li><a class="dropdown-item " href="/json2csv">JSON to CSV</a></li>
-														<li><a class="dropdown-item " href="/sql2json">SQL to JSON</a></li>
-														<li><a class="dropdown-item " href="/csvjson2json">CSVJSON to JSON</a></li>
-														<li><hr class="dropdown-divider"></li>
-														<li><a class="dropdown-item " href="/json_validator">JSON Validator</a></li>
-														<li><a class="dropdown-item " href="/json_beautifier">JSON Beautifier</a></li>
-														<!--<li><a class="dropdown-item" href="/datajanitor">Data Janitor</a></li>-->
-														<li><hr class="dropdown-divider"></li>
-														<li><a class="dropdown-item" href="https://flatfile.com/get-started?utm_source=csvjson&utm_medium=owned_site&utm_campaign=q1-2022-csvjson-redesign">Upgrade to Flatfile</a></li>
-													</ul>
-												</div>
-									</li>
-								</ol>
-							</nav>
-						</div>
-					</div>
-				</div>
-			</header>
-		
-		<div class="container px-4 py-5">
-	<div class="row">
-		<div class="description col-md-12">
-			<h1 class="text-primary fw-bold">CSV or TSV <small class="bi bi-chevron-right"></small>JSON</h1>
-			<p>To get started, upload or paste your data from Excel (saved as CSV or TSV).
-		</div>
-	</div>
-
-	<div class="row gx-5">
-		<div class="col-md-5 mb-5">
-			<div class="mb-5">
-				<label for="fileupload" class="form-label">Upload a CSV file</label>
-				<input id="fileupload" type="file" name="file" class="form-control"/>
-			</div>
-			<div class="mb-3">
-				<label for="csv" class="form-label">Or paste your CSV here</label>
-<textarea id="csv" class="form-control input save" rows="18" spellcheck="false">
-album, year, US_peak_chart_post
-The White Stripes, 1999, -
-De Stijl, 2000, -
-White Blood Cells, 2001, 61
-Elephant, 2003, 6
-Get Behind Me Satan, 2005, 3
-Icky Thump, 2007, 2
-Under Great White Northern Lights, 2010, 11
-Live in Mississippi, 2011, -
-Live at the Gold Dollar, 2012, -
-Nine Miles from the White City, 2013, -
-</textarea>
-			</div>
-			<button id="convert" type="submit" class="btn btn-primary mb-2 me-2">
-				<i class="bi bi-chevron-right"></i> Convert
-			</button>
-			<button id="clear" type="submit" class="btn btn-light mb-2 me-2">
-				<i class="bi bi-backspace"></i> Clear
-			</button>
-		</div>
-
-		<div class="col-md-7 more-bottom-margin">
-			<div class="mb-3">
-				<div class="form-check-inline">
-					<label class="form-label me-2 save" title="Choose your separator">
-						<div class="mb-2">Separator</div>
-						<select class="form-select" id="separator" name="separator">
-							<option value="auto" selected="selected">Auto-detect</option>
-							<option value="comma">Comma</option>
-							<option value="semiColon">Semi-colon</option>
-							<option value="tab">Tab</option>
-						</select>
-					</label>
-				</div>
-				<div class="form-check-inline">
-					<input type="checkbox" id="parseNumbers" name="parseNumbers" class="form-check-input save" checked="checked "/>
-					<label for="parseNumbers" class="form-check-label" title="Check to parse numbers (i.e. '7e2' would become 700). Uncheck to keep original formatted numbers as strings.">
-						 Parse numbers
-					</label>
-				</div>
-				<div class="form-check-inline">
-					<input type="checkbox" id="parseJSON" name="parseJSON" class="form-check-input save" checked="checked "/>
-					<label for="parseJSON" class="form-check-label" title="Check to parse potential values as JSON (numbers, null, false, true, [] and {}). Uncheck to keep original values as strings.">
-						 Parse JSON
-					</label>
-				</div>
-				<div class="form-check-inline">
-					<input type="checkbox" id="transpose" name="transpose" class="form-check-input save" />
-					<label for="transpose" class="form-check-label" title="Transpose the data beforehand.">
-						 Transpose
-					</label>
-				</div>
-				<br/>
-				<div class="form-check-inline">
-					<label class="form-check-label me-2">Output:</label>
-					<input type="radio" id="output-array" name="output" class="form-check-input save" value="array" checked="checked" />
-					<label for="output-array" class="form-check-label" title="Output an array of objects.">
-						Array
-					</label>
-				</div>
-				<div class="form-check-inline">
-					<input type="radio" id="output-hash" name="output" class="form-check-input save" value="hash" />
-					<label for="output-hash" class="form-check-label" title="Output an object instead of an array. First column is used as hash key.">
-						Hash
-					</label>
-				</div>
-				<div class="form-check-inline">
-					<input type="checkbox" id="minify" name="minify" class="form-check-input save" />
-					<label for="minify" class="form-check-label" title="Minify or compact result by removing spaces and new lines.">
-						 Minify
-					</label>
-				</div>
-			</div>
-			<div class="mb-3">
-  <label class="form-label">JSON</label> <span class="result-note"></span>
-  <textarea id="result" class="form-control result save" rows="18" spellcheck="false" disabled></textarea>
-</div>
-<a id="download" class="btn btn-primary mb-2 me-2" href="" download="csvjson.json" disabled="disabled" target="_self">
-  <i class="bi bi-cloud-download"></i> Download
-</a>
-<a id="copy" class="btn btn-light mb-2 me-2" href="#" title="or Ctrl + A then Ctrl + C to copy to clipboard."><i class="bi bi-share"></i> Copy to clipboard</a>
-		</div>
-	</div>
-</div>
-
-
-
-<div class="container px-4 py-5" id="about-flatfile">
-
-	<h2 class="pb-2 border-bottom">Need help cleaning data?</h2>
-
-	<div class="row row-cols-1 row-cols-sm-1 row-cols-md-12 row-cols-lg-12 g-4 py-3">
-	  <div class="col d-flex align-items-start">
-	    <div>
-				<p>
-					Embed all the functionality of csv<strong>json</strong> in any web application with <a href="https://flatfile.com/get-started?utm_source=csvjson&amp;utm_medium=owned_site&amp;utm_campaign=q1-2022-csvjson-redesign">Flatfile</a>. Auto-match columns, validate data fields, and provide an intuitive CSV import experience.
-				</p>
-			</div>
-		</div>
-	</div>
-
-</div>
-
-<div class="container px-4 py-5" id="about-csvjson">
-
-  <h2 class="pb-2 border-bottom">More Details</h2>
-
-  <div class="row row-cols-1 row-cols-sm-1 row-cols-md-12 row-cols-lg-12 g-4 py-3">
-    <div class="col d-flex align-items-start">
-      <div>
-					<ul>
-						<li>
-							This function is available as a <a href="https://www.npmjs.com/package/csvjson-csv2json" target="_blank">npm package</a>
-						</li>
-						<li>
-							CSV stands for <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">Comma Separated Values</a>.
-							Often used as an interchange data format to represent table records, one per line. CSV is plain text.
-						</li>
-						<li>
-							The CSV format is documented in an RFC memo <a href="https://tools.ietf.org/html/rfc4180" target="_blank">RFC-4180</a>.
-						</li>
-						<li>
-							The first line is often the header, or column names. Each subsequent row is a record and should have the same number of fields.
-						</li>
-						<li>
-							Fields containing the separator character, line breaks and double-quotes must be enclosed inside double quotes <code>"</code>.
-						</li>
-						<li>
-							Other separator are often used like tabs <code>\t</code>or semi-colons <code>;</code>.
-							TSV or Tab Separated Values is used to store table data in Clipboards.
-							When data is copied from Excel for example, it is stored as TSV in the Clipboard.
-						</li>
-						<li>
-							With CSVJSON you can parse values as numbers or JSON. Turn on respective <strong>Parse Numbers</strong> and <strong>Parse JSON</strong> switches to convert valid numbers and JSON (null, false, true, [] and {}).
-						</li>
-						<li>
-							With CSVJSON you can transpose the csv before conversion. Rows become columns, and columns become rows.
-						</li>
-						<li>
-							With CSVJSON you can output a hash (or object) instead of an array. In that case, the hash key will be the first column.
-						</li>
-					</ul>
-					<p>
-						<a class="btn btn-light" data-bs-toggle="collapse" href="#collapseOne" role="button" aria-expanded="false" aria-controls="collapseExample">
-							View Change Log
-						</a>
-					</p>
-      </div>
-    </div>
-
-
-		<div id="collapseOne" class="accordion-collapse collapse showclass row row-cols-1 row-cols-sm-1 row-cols-md-12 row-cols-lg-12 g-4">
-			    <div class="col d-flex align-items-start">
-						<div>
-								<h5>Mar 20, 2019</h5><p> Bug fix: Detect duplicate column headers and make them unique. <a href="https://github.com/FlatFilers/csvjson-app/issues/71">GitHub issue #71</a>.</p>
-								<h5>Feb 2, 2019</h5><p> Refactored and published <a href="https://www.npmjs.com/package/csvjson-csv2json" target="_blank">npm package csv2json</a>. Fix for <a href="https://github.com/FlatFilers/csvjson-app/issues/70">GitHub issue #70</a>.</p>
-								<h5>Jan 26, 2019</h5><p> Improvement: Removed 64k limit on download button. Also fixed issue #68 'Cannot work functional with special letters'.</p>
-								<h5>Mar 31, 2018</h5><p> Improvement: Added option to parse JSON values.</p>
-								<h5>Dec 18, 2017</h5><p> Improvement: Added option to minify or compact JSON. <a href="https://github.com/FlatFilers/csvjson-app/issues/21">GitHub issue #21</a></p>
-								<h5>Oct 7, 2016</h5><p> Improvement: Added option to parse number values or not to retain original number formatting. <a href="https://github.com/FlatFilers/csvjson-app/issues/13">GitHub issue #13</a></p>
-								<h5>Jul 09, 2016</h5><p> Fixed bug : If no text is present in a csv field, it was assigned 0 (zero) by default.</p>
-								<h5>Jun 20, 2016</h5><p> Bug fix: strings containing quotes and commas were prematurely cut.</p>
-								<h5>Dec 30, 2015</h5><p> Bug fix: drop quotes on keys of nested objects.</p>
-								<h5>Nov 26, 2015</h5><p> Improvement: Added options to transpose and output object instead of array.</p>
-								<h5>Jan 30, 2014</h5><p> Bug fix: Pasting Excel data into Textarea would cause an upload.</p>
-								<h5>Jan 12, 2014</h5><p> Initial release.</p>
-						</div>
-
-			      </div>
-			    </div>
-
-  </div>
-
-</div>
-
-		<footer class="bd-footer px-3 py-5 mt-5 bg-light">
-  		<div class="container py-5">
-		    <div class="row">
-		      <div class="col-lg-3 mb-3">
-		        <a class="d-inline-flex align-items-center mb-2 link-dark text-decoration-none" href="/" aria-label="Bootstrap">
-							<img src="./img/logo_bg-light.svg" width="140">
-		        </a>
-		        <ul class="list-unstyled small text-muted">
-		          <li class="mb-2">Rage designed and built with love by the <a href="https://flatfile.com/get-started?utm_source=csvjson&utm_medium=owned_site&utm_campaign=q1-2022-csvjson-redesign">Flatfile team</a> with the help of <a href="https://github.com/FlatFilers/csvjson-app/graphs/contributors">our contributors</a>.</li>
-		        </ul>
-		      </div>
-		      <div class="col-sm-6 col-xs-12 col-lg-3 mb-3">
-		        <h5>Convert</h5>
-		        <ul class="list-unstyled">
-		          <li class="mb-2"><a href="/csv2json">CSV to JSON</a></li>
-		          <li class="mb-2"><a href="/json2csv">JSON to CSV</a></li>
-							<li class="mb-2"><a href="/sql2json">SQL to JSON</a></li>
-							<li class="mb-2"><a href="/csvjson2json">CSVJSON to JSON</a></li>
-		        </ul>
-		      </div>
-					<div class="col-sm-6 col-xs-12 col-lg-3 mb-3">
-		        <h5>Validate & Transform</h5>
-		        <ul class="list-unstyled">
-		          <li class="mb-2"><a href="/json_validator">JSON Validator</a></li>
-		          <li class="mb-2"><a href="/json_beautifier">JSON Beautifier</a></li>
-							<!--<li class="mb-2"><a href="/datajanitor">Data Janitor</a></li>-->
-						</ul>
-		      </div>
-		      <div class="col-xs-12 col-sm-6 col-lg-3 mb-3">
-		        <h5>Community</h5>
-		        <ul class="list-unstyled">
-							<li class="mb-2"><a href="https://github.com/FlatFilers/csvjson-app/">Github</a></li>
-							<li class="mb-2"><a href="https://github.com/FlatFilers/csvjson-app/issues?q=is%3Aissue+is%3Aclosed">Change Log</a></li>
-		          <li class="mb-2"><a href="https://github.com/FlatFilers/csvjson-app/issues/new">Issues</a></li>
-		          <li class="mb-2"><a href="https://github.com/FlatFilers/csvjson-app#readme">Docs</a></li>
-		          <li class="mb-2"><a href="https://flatfile.com/get-started?utm_source=csvjson&utm_medium=owned_site&utm_campaign=q1-2022-csvjson-redesign">Corporate sponsor</a></li>
-		        </ul>
-		      </div>
-		    </div>
-  		</div>
-		</footer>
-
-		<script type="text/javascript">
-			_linkedin_partner_id = "686353";
-			window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
-			window._linkedin_data_partner_ids.push(_linkedin_partner_id);
-			</script><script type="text/javascript">
-			(function(l) {
-			if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
-			window.lintrk.q=[]}
-			var s = document.getElementsByTagName("script")[0];
-			var b = document.createElement("script");
-			b.type = "text/javascript";b.async = true;
-			b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
-			s.parentNode.insertBefore(b, s);})(window.lintrk);
-		</script>
-		<noscript>
-			<img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=686353&fmt=gif" />
-		</noscript>
-
-	</body>
-</html>
+[
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Christians have not been allowed to attend church for months but when they finally are, BLM inc. rioters are allowed to assault them. Christianity is now under physical assault by radical left wing terrorism.",
+    "source": "https://x.com/charliekirk11/status/1280172490245861377?s=20",
+    "date": "7/6/2020",
+    "type": "Text",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "President Joe Biden's Department of Defense will accept 30,000 Afghan refugees into military installations following the collapse of Kabul ... Joe Biden wants a couple hundred thousand more Ilhan Omars to come into America to change the body politic permanently.",
+    "source": "https://www.mediamatters.org/war-afghanistan/charlie-kirk-claims-biden-administration-intentionally-let-afghanistan-fall-order",
+    "date": "8/16/2021",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "These people are criminals coming into our country. I mean, maybe I'm failing to understand why we need to have this deep-seated sympathy. Do we have this deep-seated sympathy for people that go around and rob banks? They're breaking into our country. Crime does not elicit sympathy.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-defends-apparent-abuse-migrants-agents-horseback-left-has-always-hated",
+    "date": "9/21/2021",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The other side has openly admitted that this is about bringing in voters that they want and that they like and honestly, diminishing and decreasing white demographics in America.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-deputize-citizen-force-put-them-border-order-protect-white-demographics",
+    "date": "9/23/2021",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Almost everything the other side tries to advocate for is around this idea of expanding the amount of people coming into the country.",
+    "source": "https://www.mediamatters.org/charlie-kirk/youtube-charlie-kirk-suggests-supply-chain-issues-were-intentionally-created-bring",
+    "date": "10/13/2021",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Everyone's a Democrat till your daughter gets raped by some trans person in the restroom",
+    "source": "https://www.mediamatters.org/charlie-kirk/youtube-charlie-kirk-grotesquely-weaponizes-minors-sexual-assault-attack-trans-people",
+    "date": "11/3/2021",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Don't bring your values and your Berkeley worldview to this untouched slice of God's country. They're going to destroy Montana. They will. They're good at it. The activist groups will infiltrate, the racial groups will, in fact -- now thankfully, there's some good conservatives like the wonderful governor of Montana, my friend Governor Gianforte. But if this is not addressed and this migration continues -- they're like locusts, they will not stop. San Francisco, destroyed; Montana, they'll destroy that. Then they'll go to Utah, then they'll go to Nevada, then they'll go to Alaska. Whatever the last slice of heaven is, they will try to bring hell to it.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-californians-should-not-be-allowed-republican-states-theyre-locusts",
+    "date": "2/2/2022",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "KBJ - Ketanji Brown Jackson - is what your country looks like on critical race theory. KBJ is your country on CRT. KBJ - Ketanji Brown Jackson - is an embodiment of the tyranny that we currently live under. She's an ideological, unintelligent, yet confident fanatic",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-ketanji-brown-jackson-what-your-country-looks-critical-race-theory",
+    "date": "3/23/2022",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "Disney and Bob Chapek, they're held hostage by their gay employees ... These gay people feel really motivated, the employees of Disney, that six-year-olds need to learn about their incredibly graphic sexual activity.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-disney-being-held-hostage-their-gay-employees",
+    "date": "3/29/2022",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "They called us bigots if we dared to say that there was a slippery slope that would accompany legalization. But now this woman ... within the Disney leadership is chuckling saying, we need more queerness. It’s not a secret gay agenda. We need children to be exposed to two dudes kissing each other at a very young age.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-claims-disney-trying-make-your-children-gay",
+    "date": "3/30/2022",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Men are protectors – protectors of the innocent, protectors of what is the natural law. I'm not going to say that women don't have fight in them. But men need to lead.",
+    "source": "https://www.mediamatters.org/charlie-kirk/youtube-charlie-kirk-calls-men-confront-and-physically-prevent-trans-student-athletes",
+    "date": "3/30/2022",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Why else would you want to have two dudes or two women kissing in a Disney film? What is the agenda? To expose them to it or to increase the ranks of the LGBTQ community?",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-claims-disney-trying-make-your-children-gay",
+    "date": "3/30/2022",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": "-"
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Now it's not about making gay marriage legal ... now it's about making your kids gay.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-claims-disney-trying-make-your-children-gay",
+    "date": "3/30/2022",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The ACLU and the LGBT groups ... they want to do what every tyrant wants to do and every autocrat wants to do. They want to obliterate the innocence of children.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-claims-disney-trying-make-your-children-gay",
+    "date": "3/30/2022",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "Gay marriage happens and we're talking about gay stuff more than any other time. Why? Because they are not happy just having marriage. Instead, they now want to corrupt your children.",
+    "source": "https://www.mediamatters.org/charlie-kirk/youtube-charlie-kirk-warns-gay-people-want-corrupt-your-children",
+    "date": "4/8/2022",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Then marriage equality was the law of the land. Overturning other states that believed marriage was one man and one woman. A national takeover of our laws, an unprecedented federal takeover",
+    "source": "https://www.mediamatters.org/charlie-kirk/youtube-charlie-kirk-warns-gay-people-want-corrupt-your-children",
+    "date": "4/8/2022",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "There's a direct connection to inflation and the trans issue.",
+    "source": "https://t.co/44UP6Aolia",
+    "date": "4/13/2022",
+    "type": "Audio",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Let's talk about this war on white people ... You're not allowed to say that, you're obviously welcome to say it here. We agree ... the one type of racism you're not allowed to talk about, of course, is the war against people who look like you and I.",
+    "source": "https://www.mediamatters.org/charlie-kirk/douglas-murray-and-charlie-kirk-agree-there-war-white-people",
+    "date": "4/28/2022",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Gun control, like vaccines and masks, is focused on making people feel “safe” by taking freedoms away from others. Don’t fall for it.",
+    "source": "https://x.com/charliekirk11/status/1531077928007610368",
+    "date": "5/29/2022",
+    "type": "Text",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "More like misinfo",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "There is no separation of church and state. It's a fabrication. It's a fiction. It's not in the Constitution. It's made up by secular humanists. ... Of course, we should have church and state mixed together.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-there-no-separation-church-and-state",
+    "date": "7/6/2022",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Sorry, we have standards in the U.S. military. You shouldn't be serving there as a transgender person. Period.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-demands-us-military-disqualify-all-transgender-servicemembers",
+    "date": "7/11/2022",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "Climate change is the wrapper around Marxism. You have Marxism at its core and you have climate change on the exterior. Climate change activism, environmentalism, pseudo-paganism - we call it a Trojan horse, a wolf in sheep's clothing",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-likens-concern-about-climate-change-pseudo-paganism",
+    "date": "8/8/2022",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "He warned that the climate change issue, the environmentalist issue, will be the issue that will be used to deteriorate American sovereignty, to erode American private property. Rush Limbaugh was 100% right to warn us about the malevolent intentions and impact that the climate change fanatics will make on America.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-likens-concern-about-climate-change-pseudo-paganism",
+    "date": "8/8/2022",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Raids must be met with raids. They raid Donald Trump's home. Well, why don't you go raid BLM for burning down a billion dollars worth of property in the summer of 2020? ... Why don't you go raid Planned Parenthood for all of their, let's just say, very revealing crimes that was revealed five or six years ago on camera.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-republican-attorneys-general-must-immediately-raid-likes-black-lives",
+    "date": "8/9/2022",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Not being able to get access to loans, or go into school, because you're white. Happening. Active discrimination is happening all across the country in the third stage of genocide.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-walks-through-10-stages-genocide-show-democrats-are-targeting-maga",
+    "date": "9/2/2022",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "British colonialism actually made the world decent ... Why is it that the world, actually, became more civil? Well, certain cultures are better than others. Saying that out loud is a thought crime. British colonialism was the most benign global empire ever.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-british-colonialism-was-most-benign-global-empire-ever",
+    "date": "9/9/2022",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "There is a deliberate and venomous anti-white campaign in our country and it drives me crazy and we shouldn't put up with it.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-there-deliberate-and-venomous-anti-white-campaign-our-country",
+    "date": "10/25/2022",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "It's evil from the pit of hell when they're going out on television and saying whiteness this and whiteness that ... So, my message to rural America in that regard, which is overwhelmingly white, is you shouldn't put up with it.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-there-deliberate-and-venomous-anti-white-campaign-our-country",
+    "date": "10/25/2022",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The media is nuts when I talk about anti-whiteness. It's true. It exists institutionally in more ways than one.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-there-deliberate-and-venomous-anti-white-campaign-our-country",
+    "date": "10/25/2022",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "If some amazing patriot out there in San Francisco or the Bay Area wants to really be a midterm hero, someone should go and bail this guy [alleged Paul Pelosi attacker] out.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-calls-some-amazing-patriot-post-bail-alleged-paul-pelosi-attacker",
+    "date": "10/31/2022",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "It’s true, women do need to get married ... Women are happier when they’re married. … It’s just biologically and literally true.",
+    "source": "https://www.mediamatters.org/jesse-watters/right-wing-media-attack-young-voters-after-they-break-overwhelming-democrats",
+    "date": "11/10/2022",
+    "type": "Text",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "TRUE",
+    "quote": "Is this WNBA privilege? If you’re a WNBA, pot-smoking, Black lesbian, do you get treated better than a United States marine?",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-if-youre-wnba-pot-smoking-black-lesbian-do-you-get-treated-better-united",
+    "date": "12/8/2022",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Is the person on the left that t****y that came and did the interview with Joe? The TikTok t****y? Yup. Got it.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-uses-slur-refer-transgender-tiktok-influencer",
+    "date": "12/9/2022",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "T slur",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The uppity foreigner, the international welfare queen, that can't be bothered to put on a suit and tie -- I don't know, let me make sure I get this right. Is Zelensky wearing a suit and tie today? I don't know.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-calls-ukrainian-president-volodymyr-zelensky-uppity-foreigner",
+    "date": "12/21/2022",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Byron Donalds, who has not self-selected a run for Speaker, has been nominated by one of his colleagues, Chip Roy ... I don't like this affirmative action stuff. I find it nauseating where we have two Black people running.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-suggests-it-was-affirmative-action-republicans-nominate-rep-elect-byron",
+    "date": "1/4/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "I am incredibly critical and bothered by how another institution, another cultural practice has been completely taken over by the LGBTQ mafia.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-national-hockey-league-has-been-taken-over-lgbtq-mafia",
+    "date": "1/18/2023",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Diversity is our strength, no, no, no, no, no. It’s diversity is our strength as long as you wear the rainbow flag. As long as you participate in the new replacement civil religion that is birthed out of the LGBTQ alphabet mafia.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-national-hockey-league-has-been-taken-over-lgbtq-mafia",
+    "date": "1/18/2023",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The best way to explain the kind of, new alphabet mafia is the people that came out of the closet now want you to live in the closet.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-national-hockey-league-has-been-taken-over-lgbtq-mafia",
+    "date": "1/18/2023",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "I think that monogamous heterosexual marriage should be a prerequisite to adoption.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-monogamous-heterosexual-marriage-should-be-prerequisite-adoption",
+    "date": "1/19/2023",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "I don't believe Black History Month is worth the kind of full month that it is, at all.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-i-dont-believe-black-history-month-worth-kind-full-month-it-all",
+    "date": "1/20/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Black History Month is not what they say it is. It has become captured by the BLM agenda of race-based discrimination.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-i-dont-believe-black-history-month-worth-kind-full-month-it-all",
+    "date": "1/20/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Focusing on the premise that race matters, which is what Black month does ... actually only deepens any sort of racial wounds and creates more bigotry.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-i-dont-believe-black-history-month-worth-kind-full-month-it-all",
+    "date": "1/20/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "I am enthusiastically behind Ron DeSantis saying that Black-centered education has no place in Florida schools, obviously ... Western culture is better and it's a thoughtcrime to say it out loud.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-slavery-theres-lot-more-story-people-would-ever-want-acknowledge-and",
+    "date": "1/20/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "She says [the slave trade] destroyed our religion, our language, our culture. Be curious to hear her thoughts on why she thinks that worldview is good. She thinks that African tribalism is morally better than Western human equality. Is that her argument?",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-slavery-theres-lot-more-story-people-would-ever-want-acknowledge-and",
+    "date": "1/20/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "I will say all human beings are created equal in God's eyes ... but all cultures are not created equal, they're not.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-slavery-theres-lot-more-story-people-would-ever-want-acknowledge-and",
+    "date": "1/20/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "1600s African tribal culture is not on the same moral footing as to where the West ended up.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-slavery-theres-lot-more-story-people-would-ever-want-acknowledge-and",
+    "date": "1/20/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "There’s more police in your neighborhoods because Blacks commit more crimes. Period.",
+    "source": "https://cloudfront.mediamatters.org/static/D8File/2024/04/02/retracted-charlie-kirk-falsely-claims-that-black-people-commit-more-crimes-than-others.pdf",
+    "date": "1/30/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "It is the first day of Black History Month, and I think we should talk about that, because I don't think there should be a Black History Month.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-i-dont-think-there-should-be-black-history-month",
+    "date": "2/1/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "[The East Palestine train derailment] is actively poisoning the citizens of eastern Ohio. So, why is it that they kind of shrug their shoulders and they say, yeah, okay, whatever? It's very simple. It's because the war on white people continues.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-ohio-train-derailment-part-war-white-people",
+    "date": "2/14/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "For the last couple of years, I have been warning about this crusade against white people.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-ohio-train-derailment-part-war-white-people",
+    "date": "2/14/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "What they call equity, is they want to create a world where you are in a deficit if you are white.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-and-jack-posobiec-claim-concern-about-equity-reminiscent-apartheid-south",
+    "date": "2/16/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Our prison population is probably not big enough.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-our-prison-population-probably-not-big-enough",
+    "date": "3/1/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "60 percent of this school board is LGBT, is gay ... groomers can't reproduce, so instead they recruit. So, they go serve on school boards. And they go do drag queens. And they do all this other sort of disgusting nauseating stuff.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-groomers-cant-reproduce-so-instead-they-recruit-they-go-serve-school",
+    "date": "3/3/2023",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "The Chinese Communist Party military installations are programming the [TikTok] algorithm to make our children more likely to be trans, to try to get young men to be ashamed of their country.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-chinese-military-installations-are-using-tiktok-make-our-children",
+    "date": "3/22/2023",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "There’s a lot of violent fantasies, unfortunately, among the trans radicals.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirks-conspiratorial-fearmongering-and-retaliatory-fantasies-reach-dangerous",
+    "date": "4/3/2023",
+    "type": "Text",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The trans movement is almost on a jihad. They have been told that people like us want them dead and I’m afraid they’re on some sort of unholy crusade",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirks-conspiratorial-fearmongering-and-retaliatory-fantasies-reach-dangerous",
+    "date": "4/3/2023",
+    "type": "Text",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "CRT has spread, and now it’s time for us to remove the tumor.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirks-conspiratorial-fearmongering-and-retaliatory-fantasies-reach-dangerous",
+    "date": "4/3/2023",
+    "type": "Text",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "",
+    "video": "TRUE",
+    "quote": "I'm not a fan of democracy.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-im-not-fan-democracy",
+    "date": "4/4/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "TRUE",
+    "quote": "I think it’s worth it to have a cost of, unfortunately, some gun deaths every single year so that we can have the second amendment to protect our other God-given rights.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-its-worth-have-cost-unfortunately-some-gun-deaths-every-single-year-so-we",
+    "date": "4/5/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "It’s worth to have a cost of, unfortunately, some gun deaths every single year so that we can have the Second Amendment.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-its-worth-have-cost-unfortunately-some-gun-deaths-every-single-year-so-we",
+    "date": "4/6/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "I was like wow, I miss that country. It's like immediately I have a flashback to a country where t------- weren't able to do Bud Light commercials.",
+    "source": "https://www.mediamatters.org/charlie-kirk/bout-nostalgia-90s-tpusa-founder-charlie-kirk-says-anti-trans-slur-youtube",
+    "date": "4/10/2023",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "We just overturned one of the worst demonic decisions [Roe v. Wade] in the history of our country.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirks-turning-point-usa-increasingly-leaning-right-wing-christian",
+    "date": "4/27/2023",
+    "type": "Text",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "There is a disturbing pattern of Blacks jumping people of all races in the urban corridors in America. That is a fact.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-passionately-defends-tucker-carlsons-racist-text-message",
+    "date": "5/3/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "TRUE",
+    "quote": "Happening all the time in urban America, prowling Blacks go around for fun to go target white people, that’s a fact. It’s happening more and more.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-goes-unhinged-racist-rant-prowling-blacks-go-around-fun-go-target-white",
+    "date": "5/19/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "The Karen slur is attacking white women who believe in being treated respectfully.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-goes-unhinged-racist-rant-prowling-blacks-go-around-fun-go-target-white",
+    "date": "5/19/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "It is time for decent, ordinary Americans who do not believe in radical ideas in either direction to just say I will not allow my kid to be corrupted by this trans agenda",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-encourages-his-audience-bankrupt-target-selling-pride-merchandise",
+    "date": "5/24/2023",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Pride is a sin.",
+    "source": "https://www.mediamatters.org/media/4008821",
+    "date": "6/1/2023",
+    "type": "Text",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Starbucks is now taking down their Pride flags. Well, we're not going to forget Starbucks for all the gay flag stuff you're doing.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-starbucks-now-taking-down-their-pride-flags-well-were-not-going-forget",
+    "date": "6/13/2023",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Thank you for your courage to call it out what it is which is an outright war on white people.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-war-white-people-continues",
+    "date": "6/15/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The war on white people continues and we're seeing it play out in this terrible case in New York City where a white marine decided to do the right thing against a Black, mentally ill, criminal.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-war-white-people-continues",
+    "date": "6/15/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "referencing the murder of Jordan Neeley by Daniel Penny",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "[Juneteenth] is a neo-segregationist federal holiday, is what it is ... this pagan garbage.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-calls-juneteenth-neo-segregationist-federal-holiday-and-pagan-garbage",
+    "date": "6/16/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "When we say that, \"we want to hire more Black pilots.\" Hold on, slow down. People could die if you embrace the poison of wokeness.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-suggests-ceo-oceangate-killed-himself-and-his-customers-wokeness",
+    "date": "6/22/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Affirmative action is racism and today we took a step forward in ending that.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-calls-ketanji-brown-jackson-recipient-affirmative-action-who-unqualified",
+    "date": "6/29/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "If we would have said that Joy Reid and Michelle Obama and Sheila Jackson Lee and Ketanji Brown Jackson were affirmative action picks, we would have been called racists. Now they’re coming out and they’re saying it for us … You do not have the brain processing power to otherwise be taken really seriously. You had to go steal a white person’s slot to go be taken somewhat seriously.",
+    "source": "https://x.com/Ronxyz00/status/1967656828265021537",
+    "date": "7/13/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "[The Barbie Movie is] trans propaganda that is in this hyper-feminine, ultra pink propaganda thing, but it’s really been taken over by the trans mafia.",
+    "source": "https://www.mediamatters.org/charlie-kirk/right-wing-barbie-meltdown-shows-how-reactionary-forces-are-losing-culture-wars",
+    "date": "7/18/2023",
+    "type": "Text",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The 14th Amendment solved a lot of problems, and it’s created some problems. It should be, I think, narrowed in scope.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-14th-amendment-way-too-broadly-written",
+    "date": "7/18/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Young women are more liberal than ever because liberalism is rooted in complaining and young girls love to complain so obviously it's built for them.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-men-know-game-rigged-against-them-especially-young-white-men",
+    "date": "7/31/2023",
+    "type": "Video",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Men know the game is rigged against them – especially young white men.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-men-know-game-rigged-against-them-especially-young-white-men",
+    "date": "7/31/2023",
+    "type": "Video",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Women are wired to be more emotional and liberal policies appeal to their emotions.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-men-know-game-rigged-against-them-especially-young-white-men",
+    "date": "7/31/2023",
+    "type": "Video",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Women [say], \"oh why can't we let everyone in\", it's the man's job to say no, as Andrew Tate would say.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-men-know-game-rigged-against-them-especially-young-white-men",
+    "date": "7/31/2023",
+    "type": "Video",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "There's all this vagrancy and this homelessness. We shouldn't put up with it. They should be in mental institutions, put them in mental asylums.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-homelessness-they-should-be-mental-institutions-put-them-mental-asylums",
+    "date": "8/11/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "Could it be that Maui did not have to burn if they [Hawaiians] didn’t believe such wacky, goofy, pagan stuff?",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-blames-maui-wildfires-pagan-hawaiian-culture",
+    "date": "8/17/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "We should not send women into the frontlines of a conflict nor should we send men into the frontlines of educating our preschoolers.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-goes-sexist-rant-and-claims-men-should-not-be-allowed-be-preschool",
+    "date": "8/18/2023",
+    "type": "Video",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The entire Third World is moving into America ... these are lawless border jumpers. They broke the law. They’re breaking and entering into America.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-entire-third-world-moving-america-and-democrats-want",
+    "date": "9/7/2023",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "Islam is the sword the left is using to slit the throat of America.",
+    "source": "https://x.com/charliekirk11/status/1965281328108343507",
+    "date": "9/8/2023",
+    "type": "Text",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "TRUE",
+    "quote": "The transgender thing happening in America...is a throbbing middle finger to God",
+    "source": "https://x.com/RightWingWatch/status/1701259614077989121",
+    "date": "9/11/2023",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "I will say that for future retirees, people under the age of 45, we should absolutely raise the retirement age. I'm going to say something very provocative. I'm not a fan of retirement. I don't think retirement is biblical.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-calls-cuts-social-security-im-not-fan-retirement-i-dont-think-retirement",
+    "date": "9/19/2023",
+    "type": "Text",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "If you are in a red state, you should defund every single one of your colleges and universities if they are teaching DEI, CRT. Maybe underwrite engineering schools, that's it. Or else you're going to get swarms, hoards, platoons, of vengeful, rage-filled young women activists that just want to see the world burn.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-if-you-are-red-state-you-should-defund-every-single-one-your-colleges-and",
+    "date": "9/20/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "What's to prevent one of these Muslims that came across the border … from getting their hands on a firearm and going and shooting up a public place in the name of Allah",
+    "source": "https://www.mediamatters.org/fox-news/right-wing-media-are-pushing-bigoted-rhetoric-towards-muslims-rep-rashida-tlaib-and-rep",
+    "date": "10/10/2023",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "There are secular Muslims, moderate Muslims, but it doesn't make smart immigration policy to import them by the millions. It only takes a minority to blow up your country. Ilhan Omar is an active threat to the United States. She's an active threat. She hates this country. Rashida Tlaib, technically an American, doesn't act like one. ... You cannot import people that hate you and act as if it is sustainable. It is impossible.",
+    "source": "https://www.mediamatters.org/fox-news/right-wing-media-are-pushing-bigoted-rhetoric-towards-muslims-rep-rashida-tlaib-and-rep",
+    "date": "10/10/2023",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "People that still live in the 1300s, as a vast majority of Muslims do, they don't hold western values. No, this is civilization aka western values versus barbarism, also known as medieval worldview.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-vast-majority-muslims-live-1300s-and-hold-medieval-worldview",
+    "date": "10/11/2023",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Deport the foreigners that are here illegally ... They are here, they mean harm to the American homeland and I pray that they are not activated. Make sure you have a gun on you.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-tells-audience-keep-firearms-use-activated-terrorist-immigrants",
+    "date": "10/11/2023",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "We have invited some of the most disgusting people on the planet into the West ... we have imported the dynamite right into our country.",
+    "source": "https://www.mediamatters.org/fox-news/right-wing-fearmonger-about-day-jihad-coming-us-despite-lack-evidence",
+    "date": "10/16/2023",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "Jewish donors, they have a lot of explaining to do, a lot of decoupling to do, because Jewish donors have been the No 1 funding mechanism of radical open-border, neoliberal, quasi-Marxist policies, cultural institutions and nonprofits. This is a beast created by secular Jews and now they're coming for Jews, and they're like, \"What on Earth happened?\"  And it's not just the colleges. It's the nonprofits, it's the movies, it's Hollywood, it's all of it.",
+    "source": "https://www.mediamatters.org/media/4013084",
+    "date": "10/26/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Evil is everywhere, more so than any other time then I've been alive. Evil in our streets, evil in our schools, evil in our government, evil domestically, evil foreign ... you need to be armed, you need to be prepared to defend yourself and your family.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-mass-shooting-maine-you-need-be-armed-you-need-be-prepared-defend",
+    "date": "10/26/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "You have tens of thousands, hundreds of thousands, millions of young, fighting-age Muslim men in America. All it takes is for a couple of them to be activated in this country.",
+    "source": "https://www.mediamatters.org/mark-levin/heres-what-right-wing-radio-listeners-are-hearing-about-israel-hamas-war",
+    "date": "10/30/2023",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "It's perfectly acceptable in Islamic law to go kill kids — perfectly fine.",
+    "source": "https://www.mediamatters.org/mark-levin/heres-what-right-wing-radio-listeners-are-hearing-about-israel-hamas-war",
+    "date": "10/30/2023",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "To be clear, they [Palestinians] will — they'll take you out of the car and cut your head off and parade you through the streets. They're really nice people we got dealing with here. And I'll never forget — as soon as they see an Israeli license plate, they're savage animals, they’ll come after you.",
+    "source": "https://www.mediamatters.org/mark-levin/heres-what-right-wing-radio-listeners-are-hearing-about-israel-hamas-war",
+    "date": "10/30/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The Arab world, they just hate Jews. They just want Jews dead.",
+    "source": "https://www.mediamatters.org/mark-levin/heres-what-right-wing-radio-listeners-are-hearing-about-israel-hamas-war",
+    "date": "10/30/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Jewish donors work their whole life, then give away massive sums to create activists who hate them.",
+    "source": "https://www.mediamatters.org/antisemitism/charlie-kirk-turns-antisemitic-stereotypes-amid-israel-hamas-war",
+    "date": "10/31/2023",
+    "type": "Text",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Liberal Jews also donated massively to BLM.",
+    "source": "https://www.mediamatters.org/antisemitism/charlie-kirk-turns-antisemitic-stereotypes-amid-israel-hamas-war",
+    "date": "10/31/2023",
+    "type": "Text",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Jews have been some of the largest funders of cultural Marxist ideas and supporters of those ideas over the last 30 or 40 years. {...} Until you cleanse that ideology from the hierarchy in the academic elite of the West, there will not be a safe future. I'm not going to say Israel won't exist, but Israel will be in jeopardy as long as the Western children, children of the West, are being taught, with primarily Jewish dollars, subsidizing it, to view everything through oppressor oppressed dynamic. Until you shed that ideology, you will not be able to build the case for Israel, because they view Israel as an oppressor.",
+    "source": "https://www.mediamatters.org/media/4013334",
+    "date": "11/7/2023",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The western children, children of the west, are being taught, with primarily Jewish dollars, subsidizing it, to view everything through oppressor oppressed dynamic.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-blames-jewish-dollars-funding-cultural-marxist-ideas",
+    "date": "11/7/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Taylor Swift, I think she put up one voter registration link and she registered millions and millions and let's just be honest, all the Swifties want is swift abortion. That's what they want. It's 100%.",
+    "source": "https://www.mediamatters.org/charlie-kirk/meltdown-over-election-results-charlie-kirk-attacks-taylor-swift-all-swifties-want",
+    "date": "11/8/2023",
+    "type": "Video",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Jewish communities have been pushing the exact kind of hatred against whites that they claim to want people to stop using against them.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-defends-elon-musks-antisemitism-some-largest-financiers-left-wing-anti",
+    "date": "11/16/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "It is true that some of the largest financiers of left-wing anti-white causes have been Jewish Americans.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-defends-elon-musks-antisemitism-some-largest-financiers-left-wing-anti",
+    "date": "11/16/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The philosophical foundation of anti-whiteness has been largely financed by Jewish donors in the country.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-defends-elon-musks-antisemitism-some-largest-financiers-left-wing-anti",
+    "date": "11/16/2023",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "There is a lie that is told repeatedly that we are a nation of immigrants. We are not a nation of immigrants. We are a nation of settlers that had children.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-we-have-way-too-many-legal-immigrants-coming-country",
+    "date": "12/4/2023",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "I want to be very clear. I’m not just talking about illegal immigration, we have way too many legal immigrants coming into this country, too.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-we-have-way-too-many-legal-immigrants-coming-country",
+    "date": "12/4/2023",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "When I talk to foreigners, far too often, they hate this country, they’re just here to make money.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-we-have-way-too-many-legal-immigrants-coming-country",
+    "date": "12/4/2023",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "This is a serious problem on the border. It’s the intentional replacement and destruction of the United States of America.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-southern-border-its-intentional-replacement-and-destruction-united-states",
+    "date": "12/8/2023",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "They [Israel] said they don't want refugees, they don't want any of these people ... I want American immigration policy to be like that.",
+    "source": "https://www.mediamatters.org/charlie-kirk/michelle-bachmann-charlie-kirk-its-time-gaza-ends-2-million-people-who-live-there-they",
+    "date": "12/18/2023",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "It's not a Great Replacement Theory, it's a Great Replacement Reality. Just this year, 3.6 million foreigners will invade America. 10-15 million will enter by the end of Joe Biden's term. Each will probably have 3-5 kids on average while native born Americans have 1.5 per couple. You are being replaced, by design.",
+    "source": "https://x.com/charliekirk11/status/1740078183284875387",
+    "date": "12/27/2023",
+    "type": "Text",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "They aren’t even hiding their intentions. Muslims plan to conquer Europe by demographic replacement. Will Europe wake up in time?",
+    "source": "https://x.com/charliekirk11/status/1962229450374041909",
+    "date": "12/27/2023",
+    "type": "Text",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "If I’m dealing with somebody in customer service who’s a moronic Black woman, I wonder is she there because of her excellence, or is she there because of affirmative action?",
+    "source": "https://x.com/DreamAmerica_/status/1897703102439936038",
+    "date": "1/3/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Why are whites taking this? Why are we just sitting idly by and allowing corporate America to give all the jobs to nonwhite people?",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-why-are-whites-taking-why-are-we-just-sitting-idly-and-allowing-corporate",
+    "date": "1/3/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Where is this headed? South Africa. That's where this is headed. They repeatedly have calls for genocide against white people.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-why-are-whites-taking-why-are-we-just-sitting-idly-and-allowing-corporate",
+    "date": "1/3/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "We've allowed our beautiful cities to just be captured by the cult of anti-racism.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-weve-allowed-our-beautiful-cities-just-be-captured-cult-anti-racism",
+    "date": "1/3/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The southern border is, of course, the great replacement. They're trying to replace us demographically. They're trying to make the country less white. They're trying to make the country more like the third world, the dumping ground of the planet is the United States southern border. And the secret is out - the rapists, the thugs, the murderers, fighting-age males, they're coming from across the world, from China, from Russia, from Middle Eastern countries, and they're coming in and they're coming in and they're coming in and they're coming in ... It is an anti-white agenda.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-southern-border-course-great-replacement-theyre-trying-replace-us",
+    "date": "1/8/2024",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The resentment that the left-wing ruling class has for white Anglo-Saxon Protestant males is real.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-southern-border-course-great-replacement-theyre-trying-replace-us",
+    "date": "1/8/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "How do you win over white voters? You don't. You just bring in more third worlders and you dilute AKA replace them.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-southern-border-course-great-replacement-theyre-trying-replace-us",
+    "date": "1/8/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "[Their] goal is to destroy Western civilization, get rid of anything that the white man might have been responsible for.",
+    "source": "https://www.mediamatters.org/immigration/election-ramps-right-wing-media-increasingly-turn-racist-and-antisemitic-great",
+    "date": "1/8/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "TRUE",
+    "quote": "[The student] got kicked out of school under a Title IX complaint, using the Civil Rights Act, that we as conservatives worship. \"Oh, MLK's a great guy.\" Actually MLK was awful. OK? He's not a good person. He said one good thing he actually didn't believe.",
+    "source": "https://archive.li/xIqmw",
+    "date": "1/12/2024",
+    "type": "Text",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "This guy [MLK] is not worthy of a national holiday. He is not worthy of godlike status. In fact, I think it's really harmful.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-martin-luther-king-jr-not-worthy-national-holiday-he-not-worthy-godlike",
+    "date": "1/16/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "TRUE",
+    "quote": "If I see a Black pilot, I’m going to be like, boy, I hope he’s qualified.",
+    "source": "https://x.com/patriottakes/status/1749934177548669218",
+    "date": "1/23/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The invasion will continue ... the break-ins, the looting, the murder, the rapes, the arson, it's -- by the way, this is just getting warmed up. You got 15,000 fighting age males that are getting deployed all across the country. Native-born Americans, you better buy weapons, everybody. Have a lot of guns at your disposal. I would never leave your home without a weapon.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-there-border-invasion-and-native-born-americans-you-better-buy-weapons",
+    "date": "1/23/2024",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "[January 6th rioters] didn’t smash a window, but they have been charged federally for trespassing and called insurrectionists for the rest of their life. ... They should have stripped naked and filmed themselves having gay sex.",
+    "source": "https://x.com/AriDrennen/status/1753150180285894732?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1753150180285894732%7Ctwgr%5E2a22975d904d6caecd84492755b3ec129a558fe8%7Ctwcon%5Es1_c10&ref_url=https%3A%2F%2Fwww.advocate.com%2Fpolitics%2Fcharlie-kirk-anti-lgbtq-quotes",
+    "date": "2/1/2024",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "[The death penalty] should be public, should be quick, should be televised… I think at a certain age, it’s an initiation… At what age should you start to see public executions?",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-fantasizes-about-children-watching-televised-executions-certain-age-its?utm_source=chatgpt.com",
+    "date": "2/16/2024",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "I would totally tune in to see some pedo get their head chopped off.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-fantasizes-about-children-watching-televised-executions-certain-age-its",
+    "date": "2/16/2024",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "I wanna watch that execution. That'll make my day better. I wanna see him on a public block and get him be publicly executed. And I think that would be justice.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-fantasizes-about-children-watching-televised-executions-certain-age-its",
+    "date": "2/16/2024",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The great replacement strategy, which is well underway every single day in our southern border, is a strategy to replace white rural America with something different ... They hate those of you that own land and have guns and believe in a better country, and they have a plan to try and get rid of you ... You believe in God, country, family, faith, and freedom, and they won't stop until you and your children and your children's children are eliminated.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-pushes-great-replacement-conspiracy-they-wont-stop-until-you-and-your",
+    "date": "3/1/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The American Democrat party hates this country. They wanna see it collapse. They love it when America becomes less white.",
+    "source": "",
+    "date": "3/20/2024",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The Catholic Charities, by the way, are one of the biggest reasons why we have the open border crisis on the southern border. They subsidize it. They train the sex traffickers how to smuggle the women across the border.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-american-democrat-party-hates-country-they-wanna-see-it-collapse-they",
+    "date": "3/20/2024",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "We should have no asylum claims, period.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-american-democrat-party-hates-country-they-wanna-see-it-collapse-they",
+    "date": "3/20/2024",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "They are going to flood the zone and might --- you might go out to dinner, go see a movie and come back to a bunch of illegals sitting in your living room, and it will then become their home.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-you-might-go-out-dinner-go-see-movie-and-come-back-bunch-illegals-sitting",
+    "date": "3/20/2024",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "It's important to note that Haiti is legitimately infested with demonic voodoo.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-haiti-legitimately-infested-demonic-voodoo-allows-practitioners-do-quasi",
+    "date": "3/22/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Those are the men that will go into your communities and break into your homes and rape your women, take your children. But, hey, they're -- they're dreamers.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-calls-shooting-and-whipping-migrants-southern-border-if-you-enter-we-have",
+    "date": "3/22/2024",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Of course you should be able to use whips against foreigners that are coming into your country. Why is that controversial?",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-calls-shooting-and-whipping-migrants-southern-border-if-you-enter-we-have",
+    "date": "3/22/2024",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "These doctors need to be put in prison quickly. We need to have a Nuremberg-style trial for every gender-affirming clinic doctor.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-we-need-have-nuremberg-style-trial-every-gender-affirming-clinic-doctor",
+    "date": "4/1/2024",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Feminism was never about advancing female rights. Feminism was about hating men.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-we-must-ban-trans-affirming-care-entire-country-donald-trump-needs-run",
+    "date": "4/1/2024",
+    "type": "Video",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Birth control like really screws up female brains, by the way... is awful, it’s terrible, and it creates very angry and bitter young ladies and young women.",
+    "source": "https://rumble.com/v4kqgz5-tpusa-faith-presents-freedom-night-in-america-with-charlie-kirk-live-from-f.html",
+    "date": "4/3/2024",
+    "type": "Video",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "FALSE",
+    "quote": "Being called a racist is worse than being called a rapist in American Society.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-civil-rights-act-created-beast-and-beast-has-now-turned-anti-white-weapon",
+    "date": "4/16/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "4:52",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The Civil Rights Act, though, let's be clear, created a beast, and that beast has now turned into an anti-white weapon.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-civil-rights-act-created-beast-and-beast-has-now-turned-anti-white-weapon",
+    "date": "4/16/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "If you have unapologetic, ferocious anti-white racism, then young whites are gonna find some very radical political positions.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-civil-rights-act-created-beast-and-beast-has-now-turned-anti-white-weapon",
+    "date": "4/16/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "I have impatience for American Jews that have put up with the anti-white sentiments the last decade and thought it was perfectly fine.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-jews-are-experiencing-hate-we-white-people-have-been-experiencing-last",
+    "date": "4/30/2024",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Many American Jews are shocked that the organizations and the charities that they have been subsidizing want them dead.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-jews-are-experiencing-hate-we-white-people-have-been-experiencing-last",
+    "date": "4/30/2024",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Hey, you know that there's, like, a lot of venom against white people because of the color of their skin?",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-jews-are-experiencing-hate-we-white-people-have-been-experiencing-last",
+    "date": "4/30/2024",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Now Jews are experiencing the hate that we white people have been experiencing the last decade.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-jews-are-experiencing-hate-we-white-people-have-been-experiencing-last",
+    "date": "4/30/2024",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "TRUE",
+    "quote": "You might want to crack open that Bible of yours. In a lesser referenced part of the same part of scripture, is in Leviticus 18 is that, ‘thou shalt lay with another man shall be stoned to death.’ Just sayin’! So Miss Rachel, you quote Leviticus 19… the chapter before affirms God’s perfect law when it comes to sexual matters.",
+    "source": "https://x.com/patriottakes/status/1800678317030564306",
+    "date": "6/11/2024",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Allegedly, Haitians are going around and taking people's pets and eating them. The duck pond in a local park is being picked clean. So, allegedly, you have Haitians in this town of Springfield, Ohio that are going by and eating ducks.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-amplifies-debunked-social-media-rumor-about-haitian-immigrants",
+    "date": "9/9/2024",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "There will be hundreds of thousands of Haitians brought into Alabama, and they will become your masters.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-warns-haitian-migrants-will-become-your-masters-if-trump-loses-election",
+    "date": "9/27/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "They are stuffing foreigners in the reddest communities across the country, in small town red America, I think partially as revenge ... I think that they get, like, off on this sinister, like, we're gonna go send the Haitians into red America.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-warns-haitian-migrants-will-become-your-masters-if-trump-loses-election",
+    "date": "9/27/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The Haitians that are in Huntsville that are raping your women and hunting you down at night — it's only gonna get worse if — unless Donald Trump wins.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-warns-haitian-migrants-will-become-your-masters-if-trump-loses-election",
+    "date": "9/27/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Right now, roaming free on the interior of the United States are 13,000 convicted murderers, 15,000 convicted rapists. And they're just — they're having a field day, and they're coming for your daughter next.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-warns-haitian-migrants-will-become-your-masters-if-trump-loses-election",
+    "date": "9/27/2024",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Can we please just go away with half the screen during these emergency briefings to the sign language interpreters? ... This is just over the top.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-calls-eliminating-sign-language-interpreters-during-emergency-briefings",
+    "date": "1/8/2025",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Large dedicated Islamic areas are a threat to America.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-large-dedicated-islamic-areas-are-threat-america",
+    "date": "4/30/2025",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Islam has conquest values. They seek to take over land and territory, and Europe is now a conquered continent. It is not what it used to be. It's a husk of its former self, which is increasingly Mohammedan.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-large-dedicated-islamic-areas-are-threat-america",
+    "date": "4/30/2025",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Free speech is not an Islamic value. Free expression is not an Islamic value. It's actually the exact opposite.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-large-dedicated-islamic-areas-are-threat-america",
+    "date": "4/30/2025",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "No one loves Mexico as much as the people that refuse to go live there.",
+    "source": "https://x.com/charliekirk11/status/1932497504307986802",
+    "date": "6/10/2025",
+    "type": "Text",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "TRUE",
+    "quote": "I do think that there is a direct correlation between someone's testosterone and their politics.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-i-do-think-there-direct-correlation-between-someones-testosterone-and",
+    "date": "7/31/2025",
+    "type": "Video",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The great replacement of white people is far more sinister than any redistricting project.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-accuses-rep-jasmine-crockett-being-part-attempt-eliminate-white",
+    "date": "8/4/2025",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "What [Rep. Jasmine Crockett] represents is very serious, which is the continue attempt to eliminate the white population in this country.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-accuses-rep-jasmine-crockett-being-part-attempt-eliminate-white",
+    "date": "8/4/2025",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "Feminism and Islam working together to strangle the West.",
+    "source": "https://x.com/charliekirk11/status/1953199739543142579",
+    "date": "8/6/2025",
+    "type": "Text",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "We need to get rid of birthright citizenship",
+    "source": "https://www.mediamatters.org/immigration/inside-alliance-between-right-wing-media-and-trump-border-czar-tom-homan",
+    "date": "8/7/2025",
+    "type": "Text",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Mass import Islam, destroy America. It’s that simple.",
+    "source": "https://x.com/charliekirk11/status/1953548042462015696",
+    "date": "8/7/2025",
+    "type": "Text",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "White college indoctrinated women will ruin America if we let them. They are brainwashed. They are completely indoctrinated. The worldview that is being uploaded to young women on a daily basis is hyper narcissistic, hyper selfish. I am the only one that matters. Who are you to tell me how I should act? And it makes them miserable.",
+    "source": "https://x.com/WallStreetMav/status/1954534922334482575",
+    "date": "8/10/2025",
+    "type": "Video",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "We need the humiliation of criminals.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-calls-deploy-military-against-americans-chicago-new-york-boston",
+    "date": "8/11/2025",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "We need more prisons, and we need more prisoners.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-calls-deploy-military-against-americans-chicago-new-york-boston",
+    "date": "8/11/2025",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The emergent enemy in the West is wokism/Marxism combining with Islamism to destroy the American way of life. What is that? It's getting married, buying a home, having kids, allowing them to ride their bike until the sun goes down. It's sending them to a good school where they're not indoctrinated with LGBTQ garbage. It's also not having them hear the Muslim call to prayer 5 times a day. The American way of life necessarily emanates from a majority Christian culture.",
+    "source": "https://x.com/charliekirk11/status/1955752635971330419",
+    "date": "8/13/2025",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Everyone says, \"Well, we just need immigrants to come legally. We just need immigrants to come legally.\" That's not true.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-immigrants-are-not-real-americans-and-calls-end-dual-citizenship",
+    "date": "8/19/2025",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "If America is just a passport, then we are just a colony for Earth, a pile of wealth to loot. And that's how Somalis treat it.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-immigrants-are-not-real-americans-and-calls-end-dual-citizenship",
+    "date": "8/19/2025",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "I love this country, and I hate to see what mass migration is doing to it.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-immigrants-are-not-real-americans-and-calls-end-dual-citizenship",
+    "date": "8/19/2025",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "President Trump is going out on patrol tonight in DC. Shock and awe. Force. We're taking our country back from these cockroaches. Just the start.",
+    "source": "https://x.com/charliekirk11/status/1958565497869389840",
+    "date": "8/21/2025",
+    "type": "Text",
+    "topics": "Misc Fascism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "America was at its peak when we halted immigration for 40 years and we dropped our foreign-born percentage to its lowest level ever. We should be unafraid to do that.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-he-cant-find-christ-compassion-long-term-immigrants-who-dont-speak",
+    "date": "8/22/2025",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "Revive Minneapolis -- okay, that might be tough. That's a third world Somali slum. The city has a death wish.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-threatens-jb-pritzker-and-brandon-johnson-insurrection-act-and-federal",
+    "date": "8/22/2025",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "But do we want Persians and the Iranians and the Chinese to be able to come to our universities?",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-says-foreigners-who-are-seven-months-or-eight-months-pregnant-should-be",
+    "date": "8/25/2025",
+    "type": "Video",
+    "topics": "Anti-Immigrant",
+    "timestamp": "0:12",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "While we're talking about flags, we should work to overturn every conviction for those arrested, fined, or otherwise harassed for the \"hate crime\" of doing donuts over Pride flags painted on public streets.",
+    "source": "https://x.com/charliekirk11/status/1960010588651938101",
+    "date": "8/25/2025",
+    "type": "Text",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "Reject feminism. Submit to your husband, Taylor. You’re not in charge.",
+    "source": "https://www.mediamatters.org/charlie-kirk/charlie-kirk-tells-taylor-swift-submit-your-husband-and-have-ton-children",
+    "date": "8/26/2025",
+    "type": "",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "We have one culture that you assimilate towards. One. We should not put up with all these different pockets of culture.",
+    "source": "https://www.mediamatters.org/immigration/maga-media-figures-argue-some-americans-are-not-really-american",
+    "date": "8/27/2025",
+    "type": "Text",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "America does not need more visas for people from India. Perhaps no form of legal immigration has so displaced American workers as those from India. Enough already. We’re full. Let’s finally put our own people first.",
+    "source": "https://www.mediamatters.org/immigration/right-wing-media-redouble-attacks-h-1b-visa-program",
+    "date": "9/1/2025",
+    "type": "Text",
+    "topics": "Anti-Immigrant",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "We do not have enough prisoners in America.",
+    "source": "https://x.com/charliekirk11/status/1963270640183685393",
+    "date": "9/3/2025",
+    "type": "Video",
+    "topics": "Misc Fascism",
+    "timestamp": "1:26:30",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "How should we as Christians act or react to this rising menace that is Islam?",
+    "source": "https://x.com/charliekirk11/status/1963270640183685393",
+    "date": "9/3/2025",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "1:52:30",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "The church is not fighting against trangenderism, the church is not fighting for the stuff that matters. So, where did we go wrong?",
+    "source": "https://x.com/charliekirk11/status/1963270640183685393",
+    "date": "9/3/2025",
+    "type": "Video",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "1:41:20",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "TRUE",
+    "quote": "Women should have children, not careers.",
+    "source": "https://www.news18.com/world/have-kids-not-careers-what-charlie-kirk-said-about-fertility-collapse-days-before-his-death-ws-kl-9563942.html",
+    "date": "9/8/2025",
+    "type": "Text",
+    "topics": "Misogyny",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "By age 23, about half of all black males have been arrested and not enough of them have been arrested.",
+    "source": "https://x.com/charliekirk11/status/1965444897516953879",
+    "date": "9/9/2025",
+    "type": "Video",
+    "topics": "Racism",
+    "timestamp": "1:55:00 - Incorrect",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Hate speech does not exist legally in America. There's ugly speech. There's gross speech. There's evil speech, And ALL of it is protected by the First Amendment. Keep America free.",
+    "source": "https://www.newsweek.com/bondi-charlie-kirk-hate-speech-maga-2130526",
+    "date": "9/16/2025",
+    "type": "Text",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "TRUE",
+    "quote": "We made a huge mistake when we passed the Civil Rights Act in the mid-1960s.",
+    "source": "https://www.snopes.com/fact-check/kirk-civil-rights-act-mistake/?utm_medium=Social&utm_source=Facebook#Echobox=1757630271",
+    "date": "",
+    "type": "",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "TRUE",
+    "video": "TRUE",
+    "quote": "Black people were better off in slavery and subjugation before the 1940s … It was bad & it was evil, but they committed less crimes.",
+    "source": "https://www.facebook.com/watch/?v=1303579978095032",
+    "date": "",
+    "type": "",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "Islam is not compatible with Western Civilization.",
+    "source": "https://www.theguardian.com/us-news/2025/sep/11/charlie-kirk-quotes-beliefs",
+    "date": "",
+    "type": "Video",
+    "topics": "Islamophobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "“They’re trying to discredit good ideas and good arguments, just because you’re white, and that’s ridiculous”",
+    "source": "https://www.splcenter.org/resources/hatewatch/turning-point-usas-blooming-romance-alt-right/",
+    "date": "",
+    "type": "Text",
+    "topics": "Racism",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "This is why, as a country, we can’t say it’s wrong to chop off an 8-year-old’s private parts. Because if there’s many gods, there’s many moralities.",
+    "source": "https://www.mediamatters.org/fox-business/fox-business-airing-weekly-sermons-christian-nationalist-pastor-who-has-called",
+    "date": "",
+    "type": "Text",
+    "topics": "Homophobia/Transphobia",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "",
+    "source": "",
+    "date": "",
+    "type": "",
+    "topics": "",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "",
+    "source": "",
+    "date": "",
+    "type": "",
+    "topics": "",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "",
+    "source": "",
+    "date": "",
+    "type": "",
+    "topics": "",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  },
+  {
+    "downloaded": "FALSE",
+    "video": "FALSE",
+    "quote": "",
+    "source": "",
+    "date": "",
+    "type": "",
+    "topics": "",
+    "timestamp": "",
+    "how_bad": "",
+    "footnotes": "",
+    "": "",
+    "__1": ""
+  }
+]
