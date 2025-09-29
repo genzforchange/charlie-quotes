@@ -4,13 +4,69 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>replit</title>
+  <title>Remembering Charlie Kirk</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Kapakana&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
+    rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
 </head>
 
 <body>
-  Hello world
-  <script src="script.js"></script>
+  <div id="landing" class="page scroll">
+    <header>
+      <a href="/">
+      <h2 class="cursive gold">Remembering</h2>
+      <h2 class="cursive gold">Charlie Kirk</h2></a>
+    </header>
+    <div id="quote-container">
+      <div id="carousel">
+        <img src="charlie1.png" alt="Charlie Kirk" class="charlie-photo">
+        <img src="charlie2.png" alt="Charlie Kirk" class="charlie-photo">
+        <img src="charlie3.png" alt="Charlie Kirk" class="charlie-photo">
+      </div>
+      <h1 id="quote" class="cursive">
+        "Lemme see them dawgs"
+      </h1>
+      <h3 id="author" class="gold">- CHARLIE KIRK</h3>
+    </div>
+  </div>
+
+
+  <div id="message-video" class="page desktop scroll">
+    <div id="message">
+      <h2>We shouldn’t allow historical revisionism to erase the legacy he worked so hard to cultivate.</h2>
+    </div>
+    <iframe class="video" src="https://www.youtube.com/embed/rlxjAJTelVE?si=3qO1FKF9AO4HG8m-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+
+
+  <div id="message" class="page mobile scroll">
+    <h2>We shouldn’t allow historical revisionism to erase the legacy he worked so hard to cultivate.</h2>
+  </div>
+
+
+  <div id="video" class="page mobile scroll">
+    <iframe class="video" src="https://www.youtube.com/embed/rlxjAJTelVE?si=3qO1FKF9AO4HG8m-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
+
+
+  <div id="quote-preview-list" class="page">
+    <h2>In Charlie's Words</h2>
+    <div id="quote-preview-container">
+    </div>
+  </div>
+    <footer>
+      <a href="www.genzforchange.org"><img src="holo-rainbow-wifi.png" alt="rainbow wifi logo" width="50px"></a>
+
+    </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script src="script.js"></script>
 </body>
 
 </html>
