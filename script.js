@@ -58,7 +58,7 @@ async function fetchJsonData() {
       `);
     }
 
-    container.append(`<a href="quotes.html"><button class="see-more">See More Quotes</button></a>`);
+    container.append(`<a href="/quotes"><button class="see-more">See More Quotes</button></a>`);
 
     const allContainer = $("#quote-preview-container-all");
     allContainer.empty();
