@@ -145,7 +145,7 @@ function startCarousel() {
     }, 800);
   }
 
-  setInterval(cycleContent, 6000);
+  setInterval(cycleContent, 8000);
 }
 
 function setupPageFadeIn() {
