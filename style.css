@@ -227,6 +227,7 @@ h4{
   padding: 20px;
   margin-bottom: 20px;
   box-sizing: border-box;
+  break-inside: avoid;
   &.quote-preview-text h4, .quote-preview-text p{
     font-size: 12px;
     color: #221f1f;
