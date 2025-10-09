@@ -404,6 +404,16 @@ form{
   display: flex !important;
 }
 
+.submit-landing{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.airtable-embed{
+  max-width: 1200px;
+}
+
 
 @media (max-width: 550px){
   .mobile{ display: flex !important;
