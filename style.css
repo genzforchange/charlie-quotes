@@ -141,6 +141,7 @@ header h2{
   font-size: 40px;
   margin: 0 0 10px 0;
   text-align: center;
+  line-height: 35px;
 }
 
 h2{
@@ -321,13 +322,38 @@ footer{
 
 }
 
-footer a{
+.link{
   color: #f8f7f2;
   font-family: "Arimo", sans-serif;
   text-transform: uppercase;
   font-size: 12px;
-  
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid #f8f7f2;
+  text-decoration: none;
+}
 
+.link:hover{
+  background-color: #f8f7f2;
+  color: #DEBF6C;
+  transition: .2s;
+}
+
+#addQuoteCard-button{
+  color: #141251;
+  font-family: "Arimo", sans-serif;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid #141251;
+  text-decoration: none;
+}
+
+#addQuoteCard-button:hover{
+  background-color: #141251;
+  color: #f8f7f2;
+  transition: .2s
 }
 
 

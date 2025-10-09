@@ -87,6 +87,19 @@ async function fetchJsonData() {
       `);
     });
 
+    allContainer.append(`
+      <div class="quote-preview" id="addQuoteCard">
+        <div class="top">
+          <div class="quote-preview-text">
+            <h4>Don't see the quote you're looking for? Suggest it to us!</h4>
+          </div>
+        </div>
+        <div class="bottom">
+          <a href="/submit" id="addQuoteCard-button">SUBMIT A QUOTE</a>
+        </div>
+      </div>
+    `);
+
     startCarousel();
 
   } catch (error) {
@@ -242,10 +255,17 @@ searchInput.addEventListener('input', function() {
 
     for (let i = 0; i < cards.length; i++) {
         const card = cards[i];
+
+        // Always show the "Add Quote" card
+        if (card.id === 'addQuoteCard') {
+            card.style.display = 'flex';
+            continue; // skip to the next card
+        }
+
         const cardText = card.textContent.toLowerCase();
 
         if (cardText.includes(searchTerm)) {
-            card.style.display = 'flex'; // Or 'flex', 'grid', depending on your CSS
+            card.style.display = 'flex';
         } else {
             card.style.display = 'none';
         }
