@@ -412,6 +412,9 @@ form{
     display: none !important;
   }
 
+  #quote-preview-container-all{
+    column-count: 1; 
+
   #message{
     display: flex;
     justify-content: center;
