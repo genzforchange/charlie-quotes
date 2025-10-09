@@ -232,3 +232,22 @@ $(window).on("load", updateQuoteColumns);
 
 // Run on resize
 $(window).on("resize", updateQuoteColumns);
+
+const searchInput = document.getElementById('searchInput');
+const cardContainer = document.getElementById('quote-preview-container-all');
+const cards = cardContainer.getElementsByClassName('quote-preview');
+
+searchInput.addEventListener('input', function() {
+    const searchTerm = searchInput.value.toLowerCase();
+
+    for (let i = 0; i < cards.length; i++) {
+        const card = cards[i];
+        const cardText = card.textContent.toLowerCase();
+
+        if (cardText.includes(searchTerm)) {
+            card.style.display = 'flex'; // Or 'flex', 'grid', depending on your CSS
+        } else {
+            card.style.display = 'none';
+        }
+    }
+});
